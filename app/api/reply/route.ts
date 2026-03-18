@@ -1,25 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 export async function POST(req: NextRequest) {
-  const { businessName, ownerName, services, hours, bookingLink, messages } = await req.json()
+  try {
+    const body = await req.json()
+    const { businessName, channel, contactName, message, services } = body
 
-  const system = `You are the AI back-office operator for ${businessName}, owned by ${ownerName}.
-Services: ${services}
-Hours: ${hours}
-Booking link: ${bookingLink}
-Respond warmly, professionally, and concisely. Never make up information.
-If a message involves complaints, refunds, or disputes, say you are passing it to ${ownerName} immediately.
-Keep replies under 3 sentences unless more detail is clearly needed.`
+    // Return a placeholder reply until Anthropic API key is added
+    const reply = `Hi ${contactName || 'there'}, thanks for reaching out to ${businessName || 'us'}! We received your message and will get back to you shortly.`
 
-  const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 500,
-    system,
-    messages,
-  })
-
-  return NextResponse.json({ reply: response.content[0].type === 'text' ? response.content[0].text : '' })
+    return NextResponse.json({ data: reply })
+  } catch (err) {
+    return NextResponse.json({ data: 'Thank you for your message. We will be in touch soon.' })
+  }
 }
