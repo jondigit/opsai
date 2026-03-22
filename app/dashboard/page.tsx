@@ -228,7 +228,7 @@ export default function Dashboard() {
             {messages.filter(m => m.contact_id === slideContact.id).sort((a,b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0,8).map((msg,i) => (
               <div key={i} style={{ padding:'10px 0', borderBottom:`1px solid ${border}` }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
-                  <span style={{ fontSize:10, fontWeight:600, color: msg.direction==='outbound' ? '#4f8ef7' : muted }}>{msg.direction === 'outbound' ? 'ops.ai reply' : 'Customer'}</span>
+                  <span style={{ fontSize:10, fontWeight:600, color: msg.direction==='outbound' ? '#4f8ef7' : muted }}>{msg.direction === 'outbound' ? 'OPSAI' : 'Customer'}</span>
                   <span style={{ fontSize:10, color:subtext }}>{timeAgo(msg.created_at)}</span>
                 </div>
                 <div style={{ fontSize:12, color:muted, lineHeight:1.5, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{msg.content}</div>
@@ -292,9 +292,10 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* SIDEBAR */}
       <nav style={{ width:228, background:surface, borderRight:`1px solid ${border}`, display:'flex', flexDirection:'column', height:'100vh', flexShrink:0, transition:'background .3s' }}>
         <div style={{ padding:'20px 18px 16px', borderBottom:`1px solid ${border}` }}>
-          <div style={{ fontSize:16, fontWeight:700, color:text, letterSpacing:'-.4px', marginBottom:3 }}>ops.ai</div>
+          <div style={{ fontSize:16, fontWeight:700, color:text, letterSpacing:'1px', marginBottom:3 }}>OPSAI</div>
           <div style={{ fontSize:10, color:subtext, textTransform:'uppercase', letterSpacing:1, fontWeight:500 }}>{business.name}</div>
         </div>
         <div style={{ flex:1, padding:'10px', overflowY:'auto' }}>
@@ -311,7 +312,7 @@ export default function Dashboard() {
         <div style={{ padding:'12px 10px', borderTop:`1px solid ${border}` }}>
           <div style={{ display:'flex', alignItems:'center', gap:7, padding:'8px 12px', borderRadius:9, background:'rgba(82,183,136,0.07)', border:'1px solid rgba(82,183,136,0.15)', marginBottom:8 }}>
             <div style={{ width:6, height:6, borderRadius:'50%', background:'#52b788', animation:'pulse-ring 2s ease infinite' }}></div>
-            <div style={{ fontSize:11.5, fontWeight:500, color:'#52b788' }}>Operator running</div>
+            <div style={{ fontSize:11.5, fontWeight:500, color:'#52b788' }}>OPSAI running</div>
           </div>
           <button onClick={() => setDarkMode(!darkMode)} style={{ width:'100%', padding:'7px', borderRadius:9, cursor:'pointer', fontSize:12, fontWeight:500, fontFamily:F, background:bg, color:muted, border:`1px solid ${border}`, marginBottom:6 }}>
             {darkMode ? '☀ Light mode' : '☾ Dark mode'}
@@ -320,13 +321,14 @@ export default function Dashboard() {
         </div>
       </nav>
 
+      {/* MAIN */}
       <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
         <div style={{ height:56, background:surface, borderBottom:`1px solid ${border}`, padding:'0 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
           <div>
             <div style={{ fontSize:15, fontWeight:700, color:text, letterSpacing:'-.3px' }}>
               {activeTab==='inbox' && selectedContact ? selectedContact.name : tabs.find(t=>t.id===activeTab)?.label}
             </div>
-            <div style={{ fontSize:10.5, color:subtext, marginTop:1 }}>ops.ai — {business.name}</div>
+            <div style={{ fontSize:10.5, color:subtext, marginTop:1 }}>OPSAI — {business.name}</div>
           </div>
           <button onClick={() => { setShowCampaignModal(true); setCampaignStep('write') }} style={{ padding:'8px 18px', borderRadius:9, cursor:'pointer', fontSize:12.5, fontWeight:600, fontFamily:F, background:'#0e0e10', color:'white', border:'none' }}>
             + New Campaign
@@ -342,7 +344,7 @@ export default function Dashboard() {
                   { val: contacts.length, label:'Total Contacts', sub:'All time', color:'#4f8ef7' },
                   { val: '$'+collected.toLocaleString(), label:'Revenue Collected', sub:'Paid invoices', color:'#52b788' },
                   { val: campaigns.filter(c=>c.status==='live').length, label:'Live Campaigns', sub:'Currently active', color:'#a78bfa' },
-                  { val: messages.length, label:'Messages Handled', sub:'By ops.ai', color:'#f4a237' },
+                  { val: messages.length, label:'Messages Handled', sub:'By OPSAI', color:'#f4a237' },
                 ].map((s,i) => (
                   <div key={i} className="stat-num" style={{ background:surface, border:`1px solid ${border}`, borderRadius:14, padding:'18px 20px', position:'relative', overflow:'hidden', animationDelay:`${i*0.1}s` }}>
                     <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:s.color, opacity:.6, borderRadius:'14px 14px 0 0' }}></div>
@@ -465,7 +467,7 @@ export default function Dashboard() {
                           <div style={{ maxWidth:'72%' }}>
                             {msg.direction==='outbound' && (
                               <div style={{ display:'flex', alignItems:'center', gap:5, justifyContent:'flex-end', marginBottom:5 }}>
-                                {msg.ai_generated && <span style={{ fontSize:9.5, fontWeight:700, color:'#4f8ef7', background:'rgba(79,142,247,0.1)', padding:'2px 7px', borderRadius:5 }}>ops.ai</span>}
+                                {msg.ai_generated && <span style={{ fontSize:9.5, fontWeight:700, color:'#4f8ef7', background:'rgba(79,142,247,0.1)', padding:'2px 7px', borderRadius:5 }}>OPSAI</span>}
                                 {msg.status==='pending_approval' && <span style={{ fontSize:9.5, fontWeight:700, color:'#f4a237', background:'rgba(244,162,55,0.1)', padding:'2px 7px', borderRadius:5 }}>Pending</span>}
                               </div>
                             )}
@@ -673,7 +675,7 @@ export default function Dashboard() {
                 </table>
               </div>
               <div style={card()}>
-                <div style={cardHead}><div style={cardTitle}>ops.ai Activity Summary</div></div>
+                <div style={cardHead}><div style={cardTitle}>OPSAI Activity Summary</div></div>
                 <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)' }}>
                   {[
                     { label:'DMs Replied', val:activity.filter(a=>a.type==='replied').length, color:'#4f8ef7', desc:'Automated responses sent' },
