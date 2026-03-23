@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -34,29 +35,40 @@ export default function SignupPage() {
   }
 
   return (
-    <div style={{ minHeight:'100vh', background:'#f6f6f8', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'system-ui,sans-serif' }}>
-      <div style={{ background:'white', border:'1px solid #e4e4ea', borderRadius:14, padding:'40px 36px', width:380, boxShadow:'0 4px 24px rgba(0,0,0,0.06)' }}>
-        <div style={{ marginBottom:28 }}>
-          <div style={{ fontSize:20, fontWeight:700, color:'#0e0e10', marginBottom:4 }}>ops.ai</div>
-          <div style={{ fontSize:13, color:'#8b8b99' }}>Create your operator account</div>
+    <div className="auth-shell">
+      <div className="auth-card">
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <div style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--brand)' }} />
+            <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>OPSAI</div>
+          </div>
+          <div style={{ fontSize: 24, fontWeight: 700, marginBottom: 6 }}>Create your account</div>
+          <div style={{ fontSize: 13, color: 'var(--muted)' }}>Set up your workspace and start automating operations.</div>
         </div>
-        <form onSubmit={handleSignup} style={{ display:'flex', flexDirection:'column', gap:12 }}>
-          <input type="text" placeholder="Business name" value={bizName} onChange={e => setBizName(e.target.value)} required
-            style={{ padding:'10px 13px', borderRadius:8, border:'1.5px solid #e4e4ea', fontSize:13, outline:'none', fontFamily:'inherit' }} />
-          <input type="text" placeholder="Your name" value={ownerName} onChange={e => setOwnerName(e.target.value)} required
-            style={{ padding:'10px 13px', borderRadius:8, border:'1.5px solid #e4e4ea', fontSize:13, outline:'none', fontFamily:'inherit' }} />
-          <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required
-            style={{ padding:'10px 13px', borderRadius:8, border:'1.5px solid #e4e4ea', fontSize:13, outline:'none', fontFamily:'inherit' }} />
-          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required
-            style={{ padding:'10px 13px', borderRadius:8, border:'1.5px solid #e4e4ea', fontSize:13, outline:'none', fontFamily:'inherit' }} />
-          {error && <div style={{ fontSize:12, color:'#f25f5c' }}>{error}</div>}
-          <button type="submit" disabled={loading}
-            style={{ padding:'11px', borderRadius:8, background:'#0e0e10', color:'white', border:'none', fontSize:13, fontWeight:600, cursor:'pointer', fontFamily:'inherit' }}>
+        <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <div className="auth-label">Business name</div>
+            <input type="text" placeholder="Acme Services" value={bizName} onChange={e => setBizName(e.target.value)} required className="auth-input" />
+          </div>
+          <div>
+            <div className="auth-label">Your name</div>
+            <input type="text" placeholder="Jordan Lee" value={ownerName} onChange={e => setOwnerName(e.target.value)} required className="auth-input" />
+          </div>
+          <div>
+            <div className="auth-label">Email address</div>
+            <input type="email" placeholder="you@company.com" value={email} onChange={e => setEmail(e.target.value)} required className="auth-input" />
+          </div>
+          <div>
+            <div className="auth-label">Password</div>
+            <input type="password" placeholder="Create a secure password" value={password} onChange={e => setPassword(e.target.value)} required className="auth-input" />
+          </div>
+          {error && <div style={{ fontSize: 12, color: 'var(--danger)' }}>{error}</div>}
+          <button type="submit" disabled={loading} className="auth-btn">
             {loading ? 'Creating account...' : 'Create account'}
           </button>
         </form>
-        <div style={{ marginTop:16, fontSize:12, color:'#8b8b99', textAlign:'center' }}>
-          Already have an account? <a href="/auth/login" style={{ color:'#4f8ef7' }}>Sign in</a>
+        <div style={{ marginTop: 16, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
+          Already have an account? <Link href="/auth/login">Sign in</Link>
         </div>
       </div>
     </div>

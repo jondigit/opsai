@@ -32,7 +32,7 @@ export default function Dashboard() {
   const threadEndRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const supabase = createClient()
-  const F = 'system-ui,sans-serif'
+  const F = 'var(--font-geist-sans), Inter, system-ui, sans-serif'
 
   useEffect(() => {
     async function load() {
@@ -93,12 +93,12 @@ export default function Dashboard() {
   }
   async function signOut() { await supabase.auth.signOut(); router.push('/auth/login') }
 
-  const bg = darkMode ? '#0e0e10' : '#f4f4f7'
-  const surface = darkMode ? '#1a1a1f' : 'white'
-  const border = darkMode ? '#2a2a35' : '#eaeaef'
-  const text = darkMode ? '#e8e8f0' : '#0e0e10'
-  const muted = '#8b8b99'
-  const subtext = darkMode ? '#6b6b80' : '#b4b4c2'
+  const bg = darkMode ? '#070b15' : '#f6f8fc'
+  const surface = darkMode ? '#0f172a' : '#ffffff'
+  const border = darkMode ? '#24324a' : '#dbe3ef'
+  const text = darkMode ? '#e2e8f0' : '#0f172a'
+  const muted = darkMode ? '#94a3b8' : '#64748b'
+  const subtext = darkMode ? '#7d91b2' : '#94a3b8'
 
   const collected = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + Number(i.amount), 0)
   const outstanding = invoices.filter(i => i.status === 'pending').reduce((s, i) => s + Number(i.amount), 0)
@@ -171,8 +171,8 @@ export default function Dashboard() {
     { id:'settings', label:'Settings' },
   ]
 
-  const card = (extra?: any): React.CSSProperties => ({ background:surface, border:`1px solid ${border}`, borderRadius:14, overflow:'hidden' as const, ...extra })
-  const cardHead: React.CSSProperties = { display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 20px', borderBottom:`1px solid ${border}` }
+  const card = (extra?: any): React.CSSProperties => ({ background:surface, border:`1px solid ${border}`, borderRadius:18, overflow:'hidden' as const, boxShadow: darkMode ? 'none' : '0 10px 26px rgba(15, 23, 42, 0.06)', ...extra })
+  const cardHead: React.CSSProperties = { display:'flex', alignItems:'center', justifyContent:'space-between', padding:'15px 20px', borderBottom:`1px solid ${border}`, background: darkMode ? 'rgba(148,163,184,0.04)' : 'rgba(148,163,184,0.06)' }
   const cardTitle: React.CSSProperties = { fontSize:13, fontWeight:700, color:text, letterSpacing:'-.2px' }
   const aiReplied = messages.filter(m => m.ai_generated).length
   const avgResponse = messages.filter(m => m.ai_generated && m.response_time_seconds).length > 0
@@ -194,7 +194,7 @@ export default function Dashboard() {
         .slide-panel{animation:slidein .25s ease forwards}
       `}</style>
 
-      {toast && <div style={{ position:'fixed', bottom:24, right:24, background:'#0e0e10', borderRadius:10, padding:'12px 18px', fontSize:12, fontWeight:600, color:'white', boxShadow:'0 8px 32px rgba(0,0,0,0.2)', zIndex:900, display:'flex', alignItems:'center', gap:8 }}><div style={{ width:6, height:6, borderRadius:'50%', background:'#52b788' }}></div>{toast}</div>}
+      {toast && <div style={{ position:'fixed', bottom:24, right:24, background:darkMode ? '#0b1220' : '#0f172a', borderRadius:12, padding:'12px 18px', fontSize:12, fontWeight:600, color:'white', boxShadow:'0 12px 28px rgba(2,6,23,0.28)', zIndex:900, display:'flex', alignItems:'center', gap:8 }}><div style={{ width:6, height:6, borderRadius:'50%', background:'#52b788' }}></div>{toast}</div>}
 
       {slideContact && (
         <div style={{ position:'fixed', inset:0, zIndex:700, display:'flex' }} onClick={() => setSlideContact(null)}>
@@ -293,7 +293,7 @@ export default function Dashboard() {
       )}
 
       {/* SIDEBAR */}
-      <nav style={{ width:228, background:surface, borderRight:`1px solid ${border}`, display:'flex', flexDirection:'column', height:'100vh', flexShrink:0, transition:'background .3s' }}>
+      <nav style={{ width:246, background:surface, borderRight:`1px solid ${border}`, display:'flex', flexDirection:'column', height:'100vh', flexShrink:0, transition:'background .3s' }}>
         <div style={{ padding:'20px 18px 16px', borderBottom:`1px solid ${border}` }}>
           <div style={{ fontSize:16, fontWeight:700, color:text, letterSpacing:'1px', marginBottom:3 }}>OPSAI</div>
           <div style={{ fontSize:10, color:subtext, textTransform:'uppercase', letterSpacing:1, fontWeight:500 }}>{business.name}</div>
@@ -323,14 +323,14 @@ export default function Dashboard() {
 
       {/* MAIN */}
       <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
-        <div style={{ height:56, background:surface, borderBottom:`1px solid ${border}`, padding:'0 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <div style={{ height:64, background:surface, borderBottom:`1px solid ${border}`, padding:'0 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
           <div>
             <div style={{ fontSize:15, fontWeight:700, color:text, letterSpacing:'-.3px' }}>
               {activeTab==='inbox' && selectedContact ? selectedContact.name : tabs.find(t=>t.id===activeTab)?.label}
             </div>
             <div style={{ fontSize:10.5, color:subtext, marginTop:1 }}>OPSAI — {business.name}</div>
           </div>
-          <button onClick={() => { setShowCampaignModal(true); setCampaignStep('write') }} style={{ padding:'8px 18px', borderRadius:9, cursor:'pointer', fontSize:12.5, fontWeight:600, fontFamily:F, background:'#0e0e10', color:'white', border:'none' }}>
+          <button onClick={() => { setShowCampaignModal(true); setCampaignStep('write') }} style={{ padding:'9px 18px', borderRadius:11, cursor:'pointer', fontSize:12.5, fontWeight:600, fontFamily:F, background:'linear-gradient(120deg,#2563eb,#1d4ed8)', color:'white', border:'none' }}>
             + New Campaign
           </button>
         </div>

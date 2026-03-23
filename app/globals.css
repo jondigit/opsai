@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f8fc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --border: #dbe3ef;
+  --brand: #2563eb;
+  --brand-strong: #1d4ed8;
+  --success: #10b981;
+  --danger: #ef4444;
+  --muted: #64748b;
+  --ring: rgba(37, 99, 235, 0.24);
 }
 
 @theme inline {
@@ -14,13 +23,104 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #070b15;
+    --foreground: #e2e8f0;
+    --surface: #0f172a;
+    --surface-muted: #111c33;
+    --border: #24324a;
+    --brand: #3b82f6;
+    --brand-strong: #60a5fa;
+    --muted: #94a3b8;
+    --ring: rgba(59, 130, 246, 0.34);
   }
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  text-rendering: geometricPrecision;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input:focus,
+textarea:focus,
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(1200px 500px at 0% 0%, rgba(37, 99, 235, 0.12), transparent 55%),
+    radial-gradient(700px 300px at 100% 100%, rgba(16, 185, 129, 0.1), transparent 65%),
+    var(--background);
+}
+
+.auth-card {
+  width: min(460px, 100%);
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 24px 64px rgba(2, 6, 23, 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.auth-input {
+  width: 100%;
+  padding: 0.72rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.auth-label {
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.auth-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.72rem 1rem;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(120deg, var(--brand), var(--brand-strong));
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-1px);
+}
+
+.auth-btn:disabled {
+  opacity: 0.65;
+  cursor: default;
 }
