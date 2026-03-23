@@ -86,10 +86,10 @@ export default function Dashboard() {
     return Math.floor(mins / 1440) + 'd ago'
   }
   function sc(s: string) {
-    if (s === 'paid' || s === 'live' || s === 'done') return { background: 'rgba(82,183,136,0.12)', color: '#52b788' }
-    if (s === 'overdue') return { background: 'rgba(242,95,92,0.12)', color: '#f25f5c' }
-    if (s === 'sched') return { background: 'rgba(244,162,55,0.12)', color: '#f4a237' }
-    return { background: 'rgba(79,142,247,0.1)', color: '#4f8ef7' }
+    if (s === 'paid' || s === 'live' || s === 'done') return { background: 'rgba(16,185,129,0.14)', color: '#10b981' }
+    if (s === 'overdue') return { background: 'rgba(239,68,68,0.14)', color: '#ef4444' }
+    if (s === 'sched') return { background: 'rgba(245,158,11,0.14)', color: '#f59e0b' }
+    return { background: 'rgba(37,99,235,0.12)', color: '#2563eb' }
   }
   async function signOut() { await supabase.auth.signOut(); router.push('/auth/login') }
 
@@ -108,7 +108,7 @@ export default function Dashboard() {
     const msgs = messages.filter(m => m.contact_id === c.id).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     return { ...c, lastMsg: msgs[0] || null, hasPending: msgs.some(m => m.status === 'pending_approval'), msgCount: msgs.length, totalSpend: invoices.filter(inv => inv.contact_id === c.id).reduce((s, inv) => s + Number(inv.amount), 0) }
   }).filter(c => c.lastMsg).sort((a, b) => new Date(b.lastMsg.created_at).getTime() - new Date(a.lastMsg.created_at).getTime())
-  const channelColor: any = { instagram: '#e1306c', email: '#4f8ef7', sms: '#52b788', web: '#f4a237' }
+  const channelColor: any = { instagram: '#db2777', email: '#2563eb', sms: '#10b981', web: '#f59e0b' }
 
   async function generateCampaign() {
     if (!campaignGoal.trim()) return
@@ -180,7 +180,7 @@ export default function Dashboard() {
     : 0
 
   return (
-    <div style={{ display:'flex', height:'100vh', fontFamily:F, background:bg, transition:'background .3s' }}>
+    <div className="ops-shell" style={{ display:'flex', height:'100vh', fontFamily:F, background:bg, transition:'background .3s' }}>
       <style>{`
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(242,95,92,0.4)}70%{box-shadow:0 0 0 6px rgba(242,95,92,0)}100%{box-shadow:0 0 0 0 rgba(242,95,92,0)}}
@@ -192,6 +192,44 @@ export default function Dashboard() {
         .pulse-badge{animation:pulse-ring 1.5s ease infinite}
         .fade-in{animation:fadeup .3s ease forwards}
         .slide-panel{animation:slidein .25s ease forwards}
+        .ops-shell{
+          background:
+            radial-gradient(1000px 500px at 0% 0%, ${darkMode ? 'rgba(37,99,235,0.12)' : 'rgba(37,99,235,0.08)'}, transparent 58%),
+            radial-gradient(700px 300px at 100% 100%, ${darkMode ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.06)'}, transparent 65%),
+            ${bg};
+        }
+        .ops-shell button{
+          transition: all .16s ease;
+        }
+        .ops-shell button:hover{
+          filter: brightness(1.02);
+          transform: translateY(-1px);
+        }
+        .ops-shell button:active{
+          transform: translateY(0);
+        }
+        .ops-shell input,.ops-shell textarea{
+          border-radius: 12px !important;
+          border-color: ${border} !important;
+          background: ${darkMode ? '#0b1426' : '#ffffff'} !important;
+        }
+        .ops-shell table{
+          border-collapse: separate !important;
+          border-spacing: 0;
+          width: 100%;
+        }
+        .ops-shell thead th{
+          background: ${darkMode ? 'rgba(148,163,184,0.06)' : 'rgba(148,163,184,0.08)'};
+          font-size: 10px !important;
+          letter-spacing: .85px !important;
+          color: ${muted} !important;
+        }
+        .ops-shell tbody tr:hover{
+          background: ${darkMode ? 'rgba(37,99,235,0.08)' : 'rgba(37,99,235,0.04)'};
+        }
+        .ops-shell nav{
+          backdrop-filter: blur(8px);
+        }
       `}</style>
 
       {toast && <div style={{ position:'fixed', bottom:24, right:24, background:darkMode ? '#0b1220' : '#0f172a', borderRadius:12, padding:'12px 18px', fontSize:12, fontWeight:600, color:'white', boxShadow:'0 12px 28px rgba(2,6,23,0.28)', zIndex:900, display:'flex', alignItems:'center', gap:8 }}><div style={{ width:6, height:6, borderRadius:'50%', background:'#52b788' }}></div>{toast}</div>}
@@ -266,7 +304,7 @@ export default function Dashboard() {
                     <textarea value={campaignGoal} onChange={e => setCampaignGoal(e.target.value)} placeholder="e.g. Re-engage customers who haven't ordered in 60 days..." style={{ width:'100%', padding:'12px 14px', borderRadius:10, border:`1.5px solid ${border}`, fontSize:13, fontFamily:F, resize:'none', height:110, outline:'none', color:text, background:bg, lineHeight:1.6 }}/>
                     <div style={{ fontSize:10, color:subtext, marginTop:4, textAlign:'right' }}>{campaignGoal.length} characters</div>
                   </div>
-                  <button onClick={generateCampaign} disabled={campaignLoading || !campaignGoal.trim()} style={{ width:'100%', padding:'12px', borderRadius:10, background: campaignLoading || !campaignGoal.trim() ? border : '#0e0e10', color: campaignLoading || !campaignGoal.trim() ? muted : 'white', border:'none', cursor: campaignLoading || !campaignGoal.trim() ? 'default' : 'pointer', fontSize:13, fontWeight:600, fontFamily:F }}>
+                  <button onClick={generateCampaign} disabled={campaignLoading || !campaignGoal.trim()} style={{ width:'100%', padding:'12px', borderRadius:12, background: campaignLoading || !campaignGoal.trim() ? border : 'linear-gradient(120deg,#2563eb,#1d4ed8)', color: campaignLoading || !campaignGoal.trim() ? muted : 'white', border:'none', cursor: campaignLoading || !campaignGoal.trim() ? 'default' : 'pointer', fontSize:13, fontWeight:600, fontFamily:F }}>
                     {campaignLoading ? '✦ Writing...' : '✦ Generate Campaign'}
                   </button>
                 </>
@@ -293,7 +331,7 @@ export default function Dashboard() {
       )}
 
       {/* SIDEBAR */}
-      <nav style={{ width:246, background:surface, borderRight:`1px solid ${border}`, display:'flex', flexDirection:'column', height:'100vh', flexShrink:0, transition:'background .3s' }}>
+      <nav style={{ width:246, background: darkMode ? 'rgba(15,23,42,0.94)' : 'rgba(255,255,255,0.88)', borderRight:`1px solid ${border}`, display:'flex', flexDirection:'column', height:'100vh', flexShrink:0, transition:'background .3s', backdropFilter:'blur(10px)' }}>
         <div style={{ padding:'20px 18px 16px', borderBottom:`1px solid ${border}` }}>
           <div style={{ fontSize:16, fontWeight:700, color:text, letterSpacing:'1px', marginBottom:3 }}>OPSAI</div>
           <div style={{ fontSize:10, color:subtext, textTransform:'uppercase', letterSpacing:1, fontWeight:500 }}>{business.name}</div>
@@ -323,7 +361,7 @@ export default function Dashboard() {
 
       {/* MAIN */}
       <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' }}>
-        <div style={{ height:64, background:surface, borderBottom:`1px solid ${border}`, padding:'0 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <div style={{ height:64, background: darkMode ? 'rgba(15,23,42,0.9)' : 'rgba(255,255,255,0.85)', borderBottom:`1px solid ${border}`, padding:'0 28px', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0, backdropFilter:'blur(10px)' }}>
           <div>
             <div style={{ fontSize:15, fontWeight:700, color:text, letterSpacing:'-.3px' }}>
               {activeTab==='inbox' && selectedContact ? selectedContact.name : tabs.find(t=>t.id===activeTab)?.label}
@@ -553,7 +591,7 @@ export default function Dashboard() {
               <div style={card()}>
                 <div style={cardHead}>
                   <div style={cardTitle}>All Campaigns</div>
-                  <button onClick={() => setShowCampaignModal(true)} style={{ padding:'7px 16px', borderRadius:8, background:'#0e0e10', color:'white', border:'none', cursor:'pointer', fontSize:12, fontWeight:600, fontFamily:F }}>+ New Campaign</button>
+                  <button onClick={() => setShowCampaignModal(true)} style={{ padding:'8px 16px', borderRadius:10, background:'linear-gradient(120deg,#2563eb,#1d4ed8)', color:'white', border:'none', cursor:'pointer', fontSize:12, fontWeight:600, fontFamily:F }}>+ New Campaign</button>
                 </div>
                 <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead><tr style={{ borderBottom:`1px solid ${border}` }}>{['Name','Type','Sent','Conversions','Status'].map(h=><th key={h} style={{ fontSize:10, color:muted, textTransform:'uppercase', letterSpacing:.8, padding:'10px 18px', textAlign:'left', fontWeight:600 }}>{h}</th>)}</tr></thead>
@@ -582,7 +620,7 @@ export default function Dashboard() {
               <div style={card()}>
                 <div style={cardHead}>
                   <div style={cardTitle}>Invoice Ledger</div>
-                  <button onClick={() => showToast('New invoice created')} style={{ padding:'7px 16px', borderRadius:8, background:'#0e0e10', color:'white', border:'none', cursor:'pointer', fontSize:12, fontWeight:600, fontFamily:F }}>+ New Invoice</button>
+                  <button onClick={() => showToast('New invoice created')} style={{ padding:'8px 16px', borderRadius:10, background:'linear-gradient(120deg,#2563eb,#1d4ed8)', color:'white', border:'none', cursor:'pointer', fontSize:12, fontWeight:600, fontFamily:F }}>+ New Invoice</button>
                 </div>
                 <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead><tr style={{ borderBottom:`1px solid ${border}` }}>{['Client','Service','Amount','Due Date','Status'].map(h=><th key={h} style={{ fontSize:10, color:muted, textTransform:'uppercase', letterSpacing:.8, padding:'10px 18px', textAlign:'left', fontWeight:600 }}>{h}</th>)}</tr></thead>
@@ -709,7 +747,7 @@ export default function Dashboard() {
                       <div style={{ fontSize:11, fontWeight:700, color:text, textTransform:'uppercase', letterSpacing:.5, marginBottom:6 }}>Products</div>
                       <textarea style={{ width:'100%', padding:'10px 14px', borderRadius:10, border:`1.5px solid ${border}`, fontSize:13, outline:'none', fontFamily:F, color:text, height:110, resize:'none', background:bg }} value={business.services||''} onChange={e => setBusiness({...business,services:e.target.value})}/>
                     </div>
-                    <button onClick={async () => { await supabase.from('businesses').update(business).eq('id',business.id); showToast('Settings saved') }} style={{ width:'fit-content', padding:'10px 22px', borderRadius:10, cursor:'pointer', fontSize:13, fontWeight:600, fontFamily:F, background:'#0e0e10', color:'white', border:'none' }}>Save Settings</button>
+                    <button onClick={async () => { await supabase.from('businesses').update(business).eq('id',business.id); showToast('Settings saved') }} style={{ width:'fit-content', padding:'10px 22px', borderRadius:12, cursor:'pointer', fontSize:13, fontWeight:600, fontFamily:F, background:'linear-gradient(120deg,#2563eb,#1d4ed8)', color:'white', border:'none' }}>Save Settings</button>
                   </div>
                 </div>
               </div>
